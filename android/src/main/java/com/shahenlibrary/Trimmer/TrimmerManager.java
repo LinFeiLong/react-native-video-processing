@@ -34,6 +34,7 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.MapBuilder;
 
+import java.io.IOException;
 import java.util.Map;
 
 public class TrimmerManager extends ReactContextBaseJavaModule {
@@ -91,7 +92,11 @@ public class TrimmerManager extends ReactContextBaseJavaModule {
     double endTime = options.hasKey("endTime") ? options.getDouble("endTime") : 0;
     int step = options.hasKey("step") ? options.getInt("step") : 0;
     String format = options.hasKey("format") ? options.getString("format") : null;
-    Trimmer.getTrimmerPreviewImages(source, startTime, endTime, step, format, promise, reactContext);
+    try {
+      Trimmer.getTrimmerPreviewImages(source, startTime, endTime, step, format, promise, reactContext);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   @ReactMethod
