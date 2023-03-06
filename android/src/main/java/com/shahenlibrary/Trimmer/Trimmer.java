@@ -374,7 +374,11 @@ public class Trimmer {
       videoMetadata.putInt("bitrate", bitrate);
       return videoMetadata;
     } finally {
-      retriever.release();
+      try {
+        retriever.release();
+      } catch (IOException e) {
+        // Do nothing. We can't handle this, and this is usually a system problem
+      }
     }
   }
 
@@ -538,7 +542,7 @@ public class Trimmer {
     promise.resolve(event);
   }
 
-  static void getTrimmerPreviewImages(String source, double startTime, double endTime, int step, String format, final Promise promise, ReactApplicationContext ctx) {
+  static void getTrimmerPreviewImages(String source, double startTime, double endTime, int step, String format, final Promise promise, ReactApplicationContext ctx) throws IOException {
     FFmpegMediaMetadataRetriever retriever = new FFmpegMediaMetadataRetriever();
     try {
       FFmpegMediaMetadataRetriever.IN_PREFERRED_CONFIG = Bitmap.Config.ARGB_8888;
